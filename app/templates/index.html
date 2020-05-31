@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block style %}
+     .col-2 {
+        background: #f0f0f0;
+        word-wrap: break-word;
+        }
+{% endblock %}
+
+
+{% block content %}
+    <h1>{{ _('Hello, %(username)s', username=current_user.username) }}</h1>
+    {% if form %}
+        <form class="form form-horizontal" method="post" role="form">
+            {{ form.hidden_tag() }}
+            {{ wtf.form_errors(form, hiddens="only") }}
+            <div class="form-group  required"><label class="control-label" for="post">{{ _('Say something') }}</label>
+                <textarea class="form-control" id="post" name="post" required></textarea>
+            </div>
+            <input class="btn btn-outline-secondary" id="submit" name="submit" type="submit" value="{{ _('Create post') }}">
+        </form>
+
+    {% endif %}
+    <br>
+
+    {% with Like=Like %}
+    {% for post in posts %}
+        {% include '_post.html' %}
+    {% endfor %}
+    {% endwith %}
+
+    <nav aria-label="Page navigation example">
+      <ul class="pagination pagination-lg">
+        {% if prev_url %}
+            <li class="page-item">
+              <a class="page-link" href="{{ prev_url }}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1" aria-label="Previous" aria-disabled="true">
+                  <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+        {% endif %}
+        {% if next_url %}
+            <li class="page-item">
+              <a class="page-link" href="{{ next_url }}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1" aria-label="Next" aria-disabled="true">
+                  <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+        {% endif %}
+      </ul>
+    </nav>
+{% endblock content %}
+
+
+

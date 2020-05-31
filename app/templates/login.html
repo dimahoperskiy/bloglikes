@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block content %}
+    <h1>{{ _('Sign In') }}</h1>
+    <div class="row">
+        <div class="col-md-4">
+            <form class="form form-horizontal" method="post" role="form">
+                {{ form.hidden_tag() }}
+                {{ wtf.form_errors(form, hiddens="only") }}
+                {{ wtf.form_field(form.username) }}
+                {{ wtf.form_field(form.password) }}
+                {{ wtf.form_field(form.remember_me) }}
+                <br>
+                <input class="btn btn-outline-secondary" id="submit" name="submit" type="submit" value="{{ _('Sign In') }}">
+            </form>
+        </div>
+    </div>
+    <br>
+    <p>{{ _('New User?') }} <a href="{{ url_for('register') }}">{{ _('Click to Register!') }}</a></p>
+    <p>{{ _('Forgot Your Password?') }} <a href="{{ url_for('reset_password_request') }}">{{ _('Click to Reset It') }}</a></p>
+{% endblock content %}
