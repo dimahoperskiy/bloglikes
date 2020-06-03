@@ -43,7 +43,7 @@
                                  height="20px" width="20px">
                             </span>
                      </a>
-                    <p align="center">{{ Like.query.filter_by(post_id=post.id).all()|length-1 }}</p>
+                    <p align="center">{{ Like.query.filter_by(post_id=post.id).all()|length }}</p>
                     {% else %}
                     <a href="{{ url_for('dislike_user', username=post.author.username, post=post.id) }}">
                             <span>
@@ -52,7 +52,7 @@
                                  height="20px" width="20px">
                             </span>
                      </a>
-                    <p align="center" class="text-danger">{{ Like.query.filter_by(post_id=post.id).all()|length-1 }}</p>
+                    <p align="center" class="text-danger">{{ Like.query.filter_by(post_id=post.id).all()|length }}</p>
                     {% endif %}
                 {% endif %}
 
@@ -65,7 +65,7 @@
                                  height="20px" width="20px" >
                             </span>
                      </a>
-                    <p align="center">{{ Like.query.filter_by(post_id=post.id).all()|length-1 }}</p>
+                    <p align="center">{{ Like.query.filter_by(post_id=post.id).all()|length }}</p>
                     {% else %}
                     <a href="{{ url_for('dislike_index', username=post.author.username, post=post.id) }}">
                             <span>
@@ -74,7 +74,7 @@
                                  height="20px" width="20px" >
                             </span>
                      </a>
-                    <p align="center" class="text-danger">{{ Like.query.filter_by(post_id=post.id).all()|length-1 }}</p>
+                    <p align="center" class="text-danger">{{ Like.query.filter_by(post_id=post.id).all()|length }}</p>
                     {% endif %}
                 {% endif %}
 
@@ -87,7 +87,7 @@
                                  height="20px" width="20px" col>
                             </span>
                      </a>
-                    <p align="center">{{ Like.query.filter_by(post_id=post.id).all()|length-1 }}</p>
+                    <p align="center">{{ Like.query.filter_by(post_id=post.id).all()|length }}</p>
                     {% else %}
                     <a href="{{ url_for('dislike_explore', username=post.author.username, post=post.id) }}">
                             <span>
@@ -96,7 +96,7 @@
                                  height="20px" width="20px" col>
                             </span>
                      </a>
-                    <p align="center" class="text-danger">{{ Like.query.filter_by(post_id=post.id).all()|length-1 }}</p>
+                    <p align="center" class="text-danger">{{ Like.query.filter_by(post_id=post.id).all()|length }}</p>
                     {% endif %}
                 {% endif %}
 
@@ -109,7 +109,7 @@
                                  height="20px" width="20px" col>
                             </span>
                      </a>
-                    <p align="center">{{ Like.query.filter_by(post_id=post.id).all()|length-1 }}</p>
+                    <p align="center">{{ Like.query.filter_by(post_id=post.id).all()|length }}</p>
                     {% else %}
                     <a href="{{ url_for('dislike_comment', username=post.author.username, post=post.id) }}">
                             <span>
@@ -118,7 +118,7 @@
                                  height="20px" width="20px" col>
                             </span>
                      </a>
-                    <p align="center" class="text-danger">{{ Like.query.filter_by(post_id=post.id).all()|length-1 }}</p>
+                    <p align="center" class="text-danger">{{ Like.query.filter_by(post_id=post.id).all()|length }}</p>
                     {% endif %}
                 {% endif %}
             </td>

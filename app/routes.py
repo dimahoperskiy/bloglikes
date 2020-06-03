@@ -111,7 +111,7 @@ def edit_profile():
 def post(post_id):
     form = PostForm()
     if form.validate_on_submit():
-        comm = Comment(body=form.post.data, post_id=post_id)
+        comm = Comment(body=form.post.data, post_id=post_id, user_id=current_user.id)
         db.session.add(comm)
         db.session.commit()
         flash(_('You have commented this post.'))
@@ -121,7 +121,7 @@ def post(post_id):
     image_file = url_for('static', filename='pics/' + user.ava)
     return render_template('comment.html', title='Comment Profile', posts=Post.query.filter_by(id=post_id),
                            user=Post.query.filter_by(id=post_id)[0].author, image_file=image_file, Like=Like,
-                           comment_url=True, form=form, comments=comments)
+                           comment_url=True, form=form, comments=comments, User=User)
 
 
 
@@ -253,6 +253,16 @@ def delete(username, post):
     return redirect(url_for('user', username=username))
 
 
+@app.route('/user/<username>/delete_comm/<post>')
+@login_required
+def delete_comm(username, post):
+    user = User.query.filter_by(username=username).first_or_404()
+    post1 = Comment.query.filter_by(id=post).first_or_404()
+    post1.delete()
+    flash(_('You have deleted your post'))
+    return redirect(url_for('user', username=username))
+
+
 @app.route('/user/<username>/like_user/<post>')
 @login_required
 def like_user(username, post):
@@ -315,6 +325,7 @@ def dislike_explore(username, post):
     l.delete()
     return redirect(url_for('explore'))
 
+
 @app.route('/user/<username>/like_comment/<post>')
 @login_required
 def like_comment(username, post):
@@ -331,7 +342,7 @@ def like_comment(username, post):
 def dislike_comment(username, post):
     user = User.query.filter_by(username=username).first_or_404()
     post = Post.query.filter_by(id=post).first_or_404()
-    l = Like.query.filter_by(post_id=post.id).first_or_404()
+    l = Comment.query.filter_by(id=post.id).first_or_404()
     l.delete()
     return redirect(url_for('post', post_id=post.id))
 

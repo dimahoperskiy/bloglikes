@@ -2,16 +2,16 @@
     <tr valign="top">
         <div class="col-1">
             <td width="70px">
-                <a href="{{ url_for('user', username=post.comment.author.username) }}">
-                    <img class="rounded" src="{{ url_for('static', filename='pics/' + post.comment.author.ava) }}" height="100px" width="100px">
+                <a href="{{ url_for('user', username=current_user.username) }}">
+                    <img class="rounded" src="{{ url_for('static', filename='pics/' + User.query.filter_by(id=post.user_id)[0].ava) }}" height="100px" width="100px">
                 </a>
             </td>
         </div>
         <div class="col-2">
             <td>
                 {% set user_link %}
-                    <a href="{{ url_for('user', username=post.comment.author.username) }}">
-                        {{ post.comment.author.username }}
+                    <a href="{{ url_for('user', username=User.query.filter_by(id=post.user_id)[0].username) }}">
+                        {{ User.query.filter_by(id=post.user_id)[0].username }}
                     </a>
                 {% endset %}
                 {{ _('%(username)s said %(when)s',
@@ -24,8 +24,8 @@
         </div>
         <div class="col-sm-3">
             <td width="40px">
-                {% if post.comment.author.username == current_user.username %}
-                    <a href="{{ url_for('delete', username=post.comment.author.username, post=post.id) }}">
+                {% if post.user_id == current_user.id %}
+                    <a href="{{ url_for('delete_comm', username=post.comment.author.username, post=post.id) }}">
                         <span>
                         <img alt="Delete post" align="right" src="{{ url_for('static', filename='delete.png') }}" height="20px" width="20px">
                         </span>
@@ -33,94 +33,6 @@
                 {% endif %}
                 <br>
                 <hr>
-
-                {% if user_url %}
-                    {% if Like.query.filter_by(post_id=post.id, liked_id=current_user.id).first() == None %}
-                     <a href="{{ url_for('like_user', username=post.comment.author.username, post=post.id) }}">
-                            <span>
-                            <img alt="Like post"
-                                 align="right" src="{{ url_for('static', filename='like.png') }}"
-                                 height="20px" width="20px">
-                            </span>
-                     </a>
-                    <p align="center">{{ Like.query.filter_by(post_id=post.id).all()|length-1 }}</p>
-                    {% else %}
-                    <a href="{{ url_for('dislike_user', username=post.comment.author.username, post=post.id) }}">
-                            <span>
-                            <img alt="Dislike post"
-                                 align="right" src="{{ url_for('static', filename='likered.png') }}"
-                                 height="20px" width="20px">
-                            </span>
-                     </a>
-                    <p align="center" class="text-danger">{{ Like.query.filter_by(post_id=post.id).all()|length-1 }}</p>
-                    {% endif %}
-                {% endif %}
-
-                {% if index_url %}
-                    {% if Like.query.filter_by(post_id=post.id, liked_id=current_user.id).first() == None %}
-                     <a href="{{ url_for('like_index', username=post.comment.author.username, post=post.id) }}">
-                            <span>
-                            <img alt="Like post"
-                                 align="right" src="{{ url_for('static', filename='like.png') }}"
-                                 height="20px" width="20px" >
-                            </span>
-                     </a>
-                    <p align="center">{{ Like.query.filter_by(post_id=post.id).all()|length-1 }}</p>
-                    {% else %}
-                    <a href="{{ url_for('dislike_index', username=post.comment.author.username, post=post.id) }}">
-                            <span>
-                            <img alt="Dislike post"
-                                 align="right" src="{{ url_for('static', filename='likered.png') }}"
-                                 height="20px" width="20px" >
-                            </span>
-                     </a>
-                    <p align="center" class="text-danger">{{ Like.query.filter_by(post_id=post.id).all()|length-1 }}</p>
-                    {% endif %}
-                {% endif %}
-
-                {% if explore_url %}
-                    {% if Like.query.filter_by(post_id=post.id, liked_id=current_user.id).first() == None %}
-                     <a href="{{ url_for('like_explore', username=post.comment.author.username, post=post.id) }}">
-                            <span>
-                            <img alt="Like post"
-                                 align="right" src="{{ url_for('static', filename='like.png') }}"
-                                 height="20px" width="20px" col>
-                            </span>
-                     </a>
-                    <p align="center">{{ Like.query.filter_by(post_id=post.id).all()|length-1 }}</p>
-                    {% else %}
-                    <a href="{{ url_for('dislike_explore', username=post.comment.author.username, post=post.id) }}">
-                            <span>
-                            <img alt="Dislike post"
-                                 align="right" src="{{ url_for('static', filename='likered.png') }}"
-                                 height="20px" width="20px" col>
-                            </span>
-                     </a>
-                    <p align="center" class="text-danger">{{ Like.query.filter_by(post_id=post.id).all()|length-1 }}</p>
-                    {% endif %}
-                {% endif %}
-
-                {% if comment_url %}
-                    {% if Like.query.filter_by(post_id=post.id, liked_id=current_user.id).first() == None %}
-                     <a href="{{ url_for('like_comment', username=post.comment.author.username, post=post.id) }}">
-                            <span>
-                            <img alt="Like post"
-                                 align="right" src="{{ url_for('static', filename='like.png') }}"
-                                 height="20px" width="20px" col>
-                            </span>
-                     </a>
-                    <p align="center">{{ Like.query.filter_by(post_id=post.id).all()|length-1 }}</p>
-                    {% else %}
-                    <a href="{{ url_for('dislike_comment', username=post.comment.author.username, post=post.id) }}">
-                            <span>
-                            <img alt="Dislike post"
-                                 align="right" src="{{ url_for('static', filename='likered.png') }}"
-                                 height="20px" width="20px" col>
-                            </span>
-                     </a>
-                    <p align="center" class="text-danger">{{ Like.query.filter_by(post_id=post.id).all()|length-1 }}</p>
-                    {% endif %}
-                {% endif %}
             </td>
         </div>
     </tr>
