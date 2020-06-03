@@ -12,7 +12,7 @@ from app import app, db
 from app.email import send_password_reset_email
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, ResetPasswordRequestForm, \
     ResetPasswordForm
-from app.models import User, Post, Like
+from app.models import User, Post, Like, Comment
 
 
 def save_picture(form_picture):
@@ -104,6 +104,25 @@ def edit_profile():
         form.username.data = current_user.username
         form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', title='Edit Profile', form=form)
+
+
+@app.route('/post/<post_id>', methods=['GET', 'POST'])
+@login_required
+def post(post_id):
+    form = PostForm()
+    if form.validate_on_submit():
+        comm = Comment(body=form.post.data, post_id=post_id)
+        db.session.add(comm)
+        db.session.commit()
+        flash(_('You have commented this post.'))
+        return redirect(url_for('post', post_id=post_id))
+    comments = Comment.query.filter_by(post_id=post_id).order_by(Comment.timestamp.desc())
+    user = Post.query.filter_by(id=post_id)[0].author
+    image_file = url_for('static', filename='pics/' + user.ava)
+    return render_template('comment.html', title='Comment Profile', posts=Post.query.filter_by(id=post_id),
+                           user=Post.query.filter_by(id=post_id)[0].author, image_file=image_file, Like=Like,
+                           comment_url=True, form=form, comments=comments)
+
 
 
 # login logout register
@@ -295,6 +314,26 @@ def dislike_explore(username, post):
     l = Like.query.filter_by(post_id=post.id).first_or_404()
     l.delete()
     return redirect(url_for('explore'))
+
+@app.route('/user/<username>/like_comment/<post>')
+@login_required
+def like_comment(username, post):
+    user = User.query.filter_by(username=username).first_or_404()
+    post = Post.query.filter_by(id=post).first_or_404()
+    l = Like(user_id=user.id, post_id=post.id, liked_id=current_user.id)
+    db.session.add(l)
+    db.session.commit()
+    return redirect(url_for('post', post_id=post.id))
+
+
+@app.route('/user/<username>/dislike_comment/<post>')
+@login_required
+def dislike_comment(username, post):
+    user = User.query.filter_by(username=username).first_or_404()
+    post = Post.query.filter_by(id=post).first_or_404()
+    l = Like.query.filter_by(post_id=post.id).first_or_404()
+    l.delete()
+    return redirect(url_for('post', post_id=post.id))
 
 
 
