@@ -25,5 +25,3 @@ class Config(object):
 
 
 
-# flaskypassch@gmail.com
-# flask_mil.py
